@@ -1,5 +1,5 @@
 # Gasoline Price-Demand Analysis Using Linear, Log-Lin, Log-Log Models in R
-This project analyzes the impact of gasoline prices on demand in Washington, DC, using Linear, Log-Lin, and Log-Log models. It compares model performance, interprets slope coefficients, and predicts demand at given price levels. The repository includes an R script for data processing, model fitting, and analysis. 
+This repository contains an analysis of the relationship between gasoline prices and demand in the Washington, DC metropolitan area, conducted as part of the DNSC 6313 - Statistics for Analytics II course. Using real-world data from the American Automobile Association (AAA), this project explores three different regression models—Linear, Log-Lin, and Log-Log—to determine the most accurate predictor of demand fluctuations in response to price changes. The analysis includes model comparisons based on R-squared values, interpretation of slope coefficients, and demand predictions at a given price level. The full R script is provided for data processing, model fitting, and result visualization. This project demonstrates practical applications of regression techniques in economic forecasting and demand estimation. 
 
 ## Basic Information
 **Names:** N M Emran Hussain  
