@@ -1,0 +1,118 @@
+> # Load the data
+> AAA.dat <- read.table("AAA.dat", header = TRUE)
+> summary(AAA.dat)
+     Price          Demand    
+ Min.   :3.00   Min.   :2684  
+ 1st Qu.:3.25   1st Qu.:3011  
+ Median :3.50   Median :3408  
+ Mean   :3.50   Mean   :3471  
+ 3rd Qu.:3.75   3rd Qu.:3897  
+ Max.   :4.00   Max.   :4522  
+> 
+> # Linear Model
+> # Fit the linear model: Demand ~ Price
+> AAA.lm <- lm(Demand ~ Price, data = AAA.dat)
+> summary(AAA.lm)
+
+Call:
+lm(formula = Demand ~ Price, data = AAA.dat)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-85.42 -48.93 -15.40  48.30 165.54 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  9666.81     111.68   86.56   <2e-16 ***
+Price       -1770.12      31.79  -55.68   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 62.38 on 40 degrees of freedom
+Multiple R-squared:  0.9873,	Adjusted R-squared:  0.9869 
+F-statistic:  3100 on 1 and 40 DF,  p-value: < 2.2e-16
+
+> 
+> # Log-Lin Model
+> # Fit the Log-Lin model: log(Demand) ~ Price
+> AAA.dat["LnDemand"] <- log(AAA.dat$Demand)
+> AAAloglin.lm <- lm(LnDemand ~ Price, data = AAA.dat)
+> summary(AAAloglin.lm)
+
+Call:
+lm(formula = LnDemand ~ Price, data = AAA.dat)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.012949 -0.005648 -0.001026  0.004325  0.021548 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  9.92407    0.01451   684.0   <2e-16 ***
+Price       -0.50964    0.00413  -123.4   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.008104 on 40 degrees of freedom
+Multiple R-squared:  0.9974,	Adjusted R-squared:  0.9973 
+F-statistic: 1.523e+04 on 1 and 40 DF,  p-value: < 2.2e-16
+
+> 
+> # Log-Log Model
+> # Fit the Log-Log model: log(Demand) ~ log(Price)
+> AAA.dat["LnPrice"] <- log(AAA.dat$Price)
+> AAAloglog.lm <- lm(LnDemand ~ LnPrice, data = AAA.dat)
+> summary(AAAloglog.lm)
+
+Call:
+lm(formula = LnDemand ~ LnPrice, data = AAA.dat)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.009590 -0.004378  0.000003  0.004344  0.009639 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 10.358176   0.011827   875.8   <2e-16 ***
+LnPrice     -1.775692   0.009446  -188.0   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.005324 on 40 degrees of freedom
+Multiple R-squared:  0.9989,	Adjusted R-squared:  0.9988 
+F-statistic: 3.533e+04 on 1 and 40 DF,  p-value: < 2.2e-16
+
+> 
+> # Model Comparison
+> # Compare R-squared values to determine the best model
+> linear_r2 <- summary(AAA.lm)$r.squared
+> loglin_r2 <- summary(AAAloglin.lm)$r.squared
+> loglog_r2 <- summary(AAAloglog.lm)$r.squared
+> c(Linear_R2 = linear_r2, LogLin_R2 = loglin_r2, LogLog_R2 = loglog_r2)
+Linear_R2 LogLin_R2 LogLog_R2 
+0.9872630 0.9973798 0.9988692 
+> 
+> # Predict Demand for $3.00 per Gallon
+> # Predict demand under the linear model
+> linear_predict <- predict(AAA.lm, newdata = data.frame(Price = 3.00))
+> linear_predict
+       1 
+4356.463 
+> 
+> # Predict demand under the Log-Lin model
+> loglin_predict <- exp(predict(AAAloglin.lm, newdata = data.frame(Price = 3.00)))
+> loglin_predict
+       1 
+4425.604 
+> 
+> # Predict demand under the Log-Log model
+> loglog_predict <- exp(predict(AAAloglog.lm, newdata = data.frame(LnPrice = log(3.00))))
+> loglog_predict
+       1 
+4480.003 
+> 
+> # Combine results for comparison
+> c(Linear_Prediction = linear_predict, LogLin_Prediction = loglin_predict, LogLog_Prediction = loglog_predict)
+Linear_Prediction.1 LogLin_Prediction.1 LogLog_Prediction.1 
+           4356.463            4425.604            4480.003 
+> 
